@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    container_name: soccer_ai_app
+    container_name: kickpredict_app
     working_dir: /var/www
     volumes:
       - .:/var/www
@@ -19,18 +19,18 @@ services:
       - DB_CONNECTION=pgsql
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_DATABASE=soccer_ai
-      - DB_USERNAME=soccer_ai_user
-      - DB_PASSWORD=soccer_ai_password
+      - DB_DATABASE=kickpredict
+      - DB_USERNAME=kickpredict_user
+      - DB_PASSWORD=kickpredict_password
 
   db:
     image: postgres:15
-    container_name: soccer_ai_db
+    container_name: kickpredict_db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: soccer_ai
-      POSTGRES_USER: soccer_ai_user
-      POSTGRES_PASSWORD: soccer_ai_password
+      POSTGRES_DB: kickpredict
+      POSTGRES_USER: kickpredict_user
+      POSTGRES_PASSWORD: kickpredict_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -38,7 +38,7 @@ services:
 
   webserver:
     image: nginx:alpine
-    container_name: soccer_ai_webserver
+    container_name: kickpredict_webserver
     ports:
       - "8000:80"
     volumes:

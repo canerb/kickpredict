@@ -24,19 +24,19 @@ logs:
 
 # View app container logs
 app-logs:
-	docker logs -f soccer_ai_app
+	docker logs -f kickpredict_app
 
 # View webserver logs
 web-logs:
-	docker logs -f soccer_ai_webserver
+	docker logs -f kickpredict_webserver
 
 # View database logs
 db-logs:
-	docker logs -f soccer_ai_db
+	docker logs -f kickpredict_db
 
 # Shell into app container
 shell:
-	docker exec -it soccer_ai_app bash
+	docker exec -it kickpredict_app bash
 
 # Clean up containers and images
 clean:
@@ -45,12 +45,12 @@ clean:
 
 # Run migrations
 migrate:
-	docker exec -it soccer_ai_app php artisan migrate
+	docker exec -it kickpredict_app php artisan migrate
 
 # Generate application key
 key:
-	docker exec -it soccer_ai_app php artisan key:generate
+	docker exec -it kickpredict_app php artisan key:generate
 
 # Clear caches
 clear:
-	docker exec -it soccer_ai_app php artisan optimize:clear 
+	docker exec -it kickpredict_app php artisan optimize:clear 

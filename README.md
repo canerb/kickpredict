@@ -1,6 +1,6 @@
-# Soccer AI
+# KickPredict
 
-A Laravel application built with modern web technologies for soccer-related AI features.
+A Laravel application built with modern web technologies for football prediction AI features.
 
 ## Features
 
@@ -20,7 +20,7 @@ A Laravel application built with modern web technologies for soccer-related AI f
 
 1. Clone the repository and navigate to the project directory:
    ```bash
-   cd soccer_ai
+   cd kickpredict
    ```
 
 2. Start the Docker containers:
@@ -78,7 +78,7 @@ A Laravel application built with modern web technologies for soccer-related AI f
 ## Project Structure
 
 ```
-soccer_ai/
+kickpredict/
 ├── app/
 │   └── Livewire/          # Livewire components
 ├── resources/

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Starting Soccer AI Laravel application setup..."
+echo "Starting KickPredict Laravel application setup..."
 
 # Generate application key if it doesn't exist
 if [ -z "$APP_KEY" ]; then
@@ -43,7 +43,7 @@ npm run dev -- --host 0.0.0.0 &
 # php artisan route:cache
 # php artisan view:cache
 
-echo "Soccer AI Laravel application setup complete!"
+echo "KickPredict Laravel application setup complete!"
 echo "Vite dev server running on http://0.0.0.0:5173"
 echo "Application available at http://localhost:8000"
 

@@ -1,8 +1,8 @@
-# Soccer AI - Setup Guide
+# KickPredict - Setup Guide
 
 ## 🚀 Quick Start
 
-Your Soccer AI prediction app is ready! Here's how to set it up:
+Your KickPredict football prediction app is ready! Here's how to set it up:
 
 ### 1. Start the Application
 
@@ -35,12 +35,12 @@ You can get your API key from: https://platform.openai.com/api-keys
 ✅ **Single AI Service**: One call gets matches + predictions  
 ✅ **Token Efficient**: No separate calls for matches and predictions  
 ✅ **Gameweek Focus**: Gets next 6-8 matches with full analysis  
-✅ **Süper Lig Specialized**: Turkish league with real team names  
+✅ **Football League Specialized**: Multiple leagues with real team names  
 ✅ **Comprehensive**: All betting markets in one response  
 
 ## 🎯 Features Ready
 
-✅ **Next Gameweek Analysis**: AI fetches upcoming Süper Lig matches  
+✅ **Next Gameweek Analysis**: AI fetches upcoming football matches  
 ✅ **Complete Predictions**: Match result, Over/Under, Both Teams to Score, etc.  
 ✅ **Real Turkish Teams**: Galatasaray, Fenerbahçe, Beşiktaş, Trabzonspor, etc.  
 ✅ **Modern UI**: Tailwind CSS with country flags and responsive design  
@@ -83,7 +83,7 @@ make shell             # Access app container
 
 ### What One AI Call Gets You:
 ```
-Input: "Analyze next Süper Lig gameweek"
+Input: "Analyze next football gameweek"
 Output: 
 - 6-8 upcoming matches (realistic teams & dates)
 - Complete betting predictions for each match
