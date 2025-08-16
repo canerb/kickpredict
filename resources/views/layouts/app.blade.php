@@ -30,8 +30,8 @@
                         <div class="ml-10 flex items-baseline space-x-4">
                             <a href="{{ route('home') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
                             @auth
-                                @if(auth()->user()->is_admin)
-                                    <a href="{{ route('manage-matches') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Manage Matches</a>
+                                @if(auth()->user() && auth()->user()->is_admin)
+                                    <a href="{{ route('admin') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</a>
                                     <a href="{{ route('manage-results') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Manage Results</a>
                                 @endif
                             @endauth

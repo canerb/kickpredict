@@ -549,12 +549,20 @@
                     </svg>
                 </div>
                 <h3 class="mt-2 text-sm font-medium text-gray-900">No predictions yet</h3>
-                <p class="mt-1 text-sm text-gray-500">Add some matches and generate predictions to get started.</p>
-                <div class="mt-6">
-                    <a href="{{ route('manage-matches') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                        Manage Matches
-                    </a>
-                </div>
+                @auth
+                    @if(auth()->user() && auth()->user()->is_admin)
+                        <p class="mt-1 text-sm text-gray-500">Add some matches and generate predictions to get started.</p>
+                        <div class="mt-6">
+                            <a href="{{ route('admin') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                                Admin Panel
+                            </a>
+                        </div>
+                    @else
+                        <p class="mt-1 text-sm text-gray-500">No matches available for predictions yet. Check back later!</p>
+                    @endif
+                @else
+                    <p class="mt-1 text-sm text-gray-500">No matches available for predictions yet. Check back later!</p>
+                @endauth
             </div>
         @endif
     </div>

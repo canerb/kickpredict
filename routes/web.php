@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Welcome;
-use App\Livewire\ManageMatches;
+use App\Livewire\AdminManagement;
 use App\Livewire\ManageResults;
 use App\Livewire\AdminLogin;
 
@@ -22,6 +22,6 @@ Route::post('/admin/logout', function () {
 
 // Protected admin routes
 Route::middleware(['admin'])->group(function () {
-    Route::get('/manage-matches', ManageMatches::class)->name('manage-matches');
+    Route::get('/admin', AdminManagement::class)->name('admin');
     Route::get('/manage-results', ManageResults::class)->name('manage-results');
 });

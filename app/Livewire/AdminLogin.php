@@ -37,7 +37,7 @@ class AdminLogin extends Component
                 'type' => 'success'
             ]);
             
-            return $this->redirect(route('manage-matches'), navigate: true);
+            return $this->redirect(route('admin'), navigate: true);
         }
 
         $this->addError('login', 'Invalid admin credentials.');

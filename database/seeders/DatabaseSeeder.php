@@ -13,18 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
-        // Seed soccer prediction data
+        // Only seed admin user - all other data will be managed through admin panel
         $this->call([
-            LeagueSeeder::class,
-            TeamSeeder::class,
-            SoccerMatchSeeder::class,
+            AdminUserSeeder::class,
         ]);
     }
 }
