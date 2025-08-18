@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Soccer AI') }}</title>
+    <title>{{ config('app.name', 'KickPredict') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -17,14 +17,14 @@
     <!-- Livewire Styles -->
     @livewireStyles
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased min-h-screen flex flex-col">
     <!-- Navigation -->
     <nav class="bg-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <a href="{{ route('home') }}" class="text-white font-bold text-xl">Soccer AI</a>
+                        <a href="{{ route('home') }}" class="text-white font-bold text-xl">KickPredict</a>
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-4">
@@ -60,7 +60,13 @@
         </div>
     </nav>
 
-    {{ $slot }}
+    <!-- Main Content -->
+    <main class="flex-1">
+        {{ $slot }}
+    </main>
+
+    <!-- Footer -->
+    @livewire('footer')
 
     <!-- Livewire Scripts -->
     @livewireScripts

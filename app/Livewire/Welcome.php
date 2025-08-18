@@ -6,12 +6,16 @@ use App\Models\League;
 use App\Models\SoccerMatch;
 use App\Services\SoccerAnalysisService;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Welcome extends Component
 {
+    use WithPagination;
+
     public $leagues;
     public $selectedLeagueId;
-    public $matches;
+    public $selectedGameweek = null;
+    public $availableGameweeks = [];
     public $isLoading = false;
     public $expandedMatches = [];
 
@@ -19,25 +23,56 @@ class Welcome extends Component
     {
         $this->leagues = League::all();
         $this->selectedLeagueId = $this->leagues->first()?->id;
-        $this->loadMatches();
+        $this->loadAvailableGameweeks();
     }
 
     public function selectLeague($leagueId)
     {
         $this->selectedLeagueId = $leagueId;
-        $this->loadMatches();
+        $this->selectedGameweek = null; // Reset gameweek when changing leagues
+        $this->loadAvailableGameweeks();
+        $this->resetPage(); // Reset pagination when changing leagues
     }
 
-    public function loadMatches()
+    public function updatedSelectedLeagueId()
+    {
+        \Log::info('League changed in Welcome component', [
+            'new_league_id' => $this->selectedLeagueId
+        ]);
+        
+        $this->expandedMatches = []; // Reset expanded state when switching leagues
+        $this->selectedGameweek = null; // Reset gameweek when changing leagues
+        $this->loadAvailableGameweeks();
+        $this->resetPage(); // Reset pagination when changing leagues
+        
+        \Log::info('League changed - gameweeks reloaded', [
+            'league_id' => $this->selectedLeagueId,
+            'available_gameweeks' => count($this->availableGameweeks)
+        ]);
+    }
+
+    public function updatedSelectedGameweek()
+    {
+        $this->resetPage(); // Reset pagination when changing gameweeks
+    }
+
+    public function loadAvailableGameweeks()
     {
         if ($this->selectedLeagueId) {
-            $this->matches = SoccerMatch::with(['homeTeam', 'awayTeam', 'league', 'prediction'])
-                ->where('league_id', $this->selectedLeagueId)
-                ->whereHas('prediction')
-                ->orderBy('match_date')
-                ->get();
+            $this->availableGameweeks = SoccerMatch::where('league_id', $this->selectedLeagueId)
+                ->whereNotNull('gameweek')
+                ->distinct()
+                ->orderBy('gameweek')
+                ->pluck('gameweek', 'gameweek')
+                ->toArray();
+                
+            // Auto-select the first available gameweek if none is selected
+            if (!$this->selectedGameweek && !empty($this->availableGameweeks)) {
+                $this->selectedGameweek = array_key_first($this->availableGameweeks);
+            }
         } else {
-            $this->matches = collect();
+            $this->availableGameweeks = [];
+            $this->selectedGameweek = null;
         }
     }
 
@@ -75,7 +110,7 @@ class Welcome extends Component
             $analysisService = app(SoccerAnalysisService::class);
             
             $result = $analysisService->analyzeNextGameweek($league);
-            $this->loadMatches();
+            $this->loadAvailableGameweeks(); // Refresh available gameweeks after generating predictions
             
             $this->dispatch('notify', [
                 'message' => "Generated predictions for {$result['matches_count']} matches!"
@@ -118,7 +153,18 @@ class Welcome extends Component
 
     public function render()
     {
-        return view('livewire.welcome')
+        $matches = collect();
+        
+        if ($this->selectedLeagueId && $this->selectedGameweek) {
+            $matches = SoccerMatch::with(['homeTeam', 'awayTeam', 'league', 'prediction'])
+                ->where('league_id', $this->selectedLeagueId)
+                ->where('gameweek', $this->selectedGameweek)
+                ->whereHas('prediction')
+                ->orderBy('match_date')
+                ->paginate(10);
+        }
+
+        return view('livewire.welcome', compact('matches'))
             ->layout('layouts.app');
     }
 } 

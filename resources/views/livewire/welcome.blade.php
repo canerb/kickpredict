@@ -18,6 +18,18 @@
                         @endforeach
                     </select>
                     
+                    <!-- Gameweek Filter -->
+                    @if(count($availableGameweeks) > 0)
+                        <select 
+                            wire:model.live="selectedGameweek"
+                            class="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                            @foreach($availableGameweeks as $gameweek)
+                                <option value="{{ $gameweek }}">Gameweek {{ $gameweek }}</option>
+                            @endforeach
+                        </select>
+                    @endif
+                    
                     <!-- Generate Predictions Button (Admin Only) -->
                     @auth
                         @if(auth()->user()->is_admin)
@@ -54,6 +66,9 @@
                                         <!-- VS -->
                                         <div class="flex flex-col items-center">
                                             <div class="text-2xl font-bold text-gray-400">VS</div>
+                                            @if($match->gameweek)
+                                                <div class="text-xs text-blue-600 font-medium">{{ $match->gameweek_label ?: 'Gameweek ' . $match->gameweek }}</div>
+                                            @endif
                                             <div class="text-sm text-gray-500">{{ $match->match_date->format('M j, Y') }}</div>
                                             <div class="text-sm text-gray-500">{{ $match->match_date->format('H:i') }}</div>
                                         </div>
@@ -540,6 +555,13 @@
                     </div>
                 @endforeach
             </div>
+            
+            <!-- Pagination -->
+            @if($matches instanceof \Illuminate\Pagination\LengthAwarePaginator && $matches->hasPages())
+                <div class="mt-6">
+                    {{ $matches->links() }}
+                </div>
+            @endif
         @else
             <!-- Empty State -->
             <div class="bg-white shadow-sm rounded-lg p-12 text-center">

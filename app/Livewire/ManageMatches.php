@@ -14,6 +14,8 @@ class ManageMatches extends Component
     use WithPagination;
 
     public $selectedLeague;
+    public $gameweek;
+    public $gameweekLabel;
     public $homeTeamId;
     public $awayTeamId;
     public $matchDate;
@@ -22,6 +24,8 @@ class ManageMatches extends Component
 
     protected $rules = [
         'selectedLeague' => 'required|exists:leagues,id',
+        'gameweek' => 'required|integer|min:1|max:50',
+        'gameweekLabel' => 'nullable|string|max:255',
         'homeTeamId' => 'required|exists:teams,id',
         'awayTeamId' => 'required|exists:teams,id|different:homeTeamId',
         'matchDate' => 'required|date|after:today',
@@ -36,6 +40,8 @@ class ManageMatches extends Component
     public function mount()
     {
         $this->selectedLeague = League::first()?->id;
+        $this->gameweek = 1;
+        $this->gameweekLabel = 'Matchday 1';
         $this->matchDate = now()->addDay()->format('Y-m-d');
         $this->matchTime = '20:00';
     }
@@ -70,6 +76,8 @@ class ManageMatches extends Component
 
         SoccerMatch::create([
             'league_id' => $this->selectedLeague,
+            'gameweek' => $this->gameweek,
+            'gameweek_label' => $this->gameweekLabel ?: "Matchday {$this->gameweek}",
             'home_team_id' => $this->homeTeamId,
             'away_team_id' => $this->awayTeamId,
             'match_date' => $matchDateTime,
@@ -96,6 +104,8 @@ class ManageMatches extends Component
 
     public function resetForm()
     {
+        $this->gameweek = 1;
+        $this->gameweekLabel = 'Matchday 1';
         $this->homeTeamId = null;
         $this->awayTeamId = null;
         $this->matchDate = now()->addDay()->format('Y-m-d');

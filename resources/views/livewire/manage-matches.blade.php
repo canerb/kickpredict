@@ -41,6 +41,35 @@
                     @error('selectedLeague') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
+                <!-- Gameweek Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="gameweek" class="block text-sm font-medium text-gray-700">Gameweek Number</label>
+                        <input 
+                            type="number" 
+                            wire:model="gameweek"
+                            id="gameweek"
+                            min="1"
+                            max="50"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            placeholder="1"
+                        >
+                        @error('gameweek') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label for="gameweekLabel" class="block text-sm font-medium text-gray-700">Gameweek Label (Optional)</label>
+                        <input 
+                            type="text" 
+                            wire:model="gameweekLabel"
+                            id="gameweekLabel"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            placeholder="e.g., Matchday 1, Week 5"
+                        >
+                        @error('gameweekLabel') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
                 <!-- Team Selection -->
                 @if($selectedLeague)
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -132,6 +161,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">League</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gameweek</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Match</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -143,6 +173,12 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {{ $match->league->name }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <div class="font-medium">{{ $match->gameweek ?? 'N/A' }}</div>
+                                        @if($match->gameweek_label)
+                                            <div class="text-gray-500 text-xs">{{ $match->gameweek_label }}</div>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         <div class="font-medium">{{ $match->homeTeam->name }}</div>
