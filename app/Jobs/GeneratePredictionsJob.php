@@ -17,7 +17,7 @@ class GeneratePredictionsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 600; // 10 minutes timeout
+    public $timeout = 3600; // 1 hour timeout for multiple matches
     public $tries = 3; // Retry 3 times on failure
 
     protected $leagueId;
