@@ -34,6 +34,8 @@ class AdminManagement extends Component
     public $matchAwayTeamId = '';
     public $matchDate = '';
     public $matchVenue = '';
+    public $matchGameweek = 1;
+    public $matchGameweekLabel = 'Matchday 1';
     public $editingMatch = null;
 
     public function mount()
@@ -164,6 +166,8 @@ class AdminManagement extends Component
             'matchHomeTeamId' => 'required|exists:teams,id',
             'matchAwayTeamId' => 'required|exists:teams,id|different:matchHomeTeamId',
             'matchDate' => 'required|date',
+            'matchGameweek' => 'required|integer|min:1|max:50',
+            'matchGameweekLabel' => 'nullable|string|max:255',
         ]);
 
         if ($this->editingMatch) {
@@ -173,6 +177,8 @@ class AdminManagement extends Component
                 'away_team_id' => $this->matchAwayTeamId,
                 'match_date' => $this->matchDate,
                 'venue' => $this->matchVenue,
+                'gameweek' => $this->matchGameweek,
+                'gameweek_label' => $this->matchGameweekLabel ?: "Matchday {$this->matchGameweek}",
             ]);
             session()->flash('success', 'Match updated successfully!');
         } else {
@@ -182,6 +188,8 @@ class AdminManagement extends Component
                 'away_team_id' => $this->matchAwayTeamId,
                 'match_date' => $this->matchDate,
                 'venue' => $this->matchVenue,
+                'gameweek' => $this->matchGameweek,
+                'gameweek_label' => $this->matchGameweekLabel ?: "Matchday {$this->matchGameweek}",
             ]);
             session()->flash('success', 'Match created successfully!');
         }
@@ -197,6 +205,8 @@ class AdminManagement extends Component
         $this->matchAwayTeamId = $match->away_team_id;
         $this->matchDate = $match->match_date->format('Y-m-d\TH:i');
         $this->matchVenue = $match->venue;
+        $this->matchGameweek = $match->gameweek ?? 1;
+        $this->matchGameweekLabel = $match->gameweek_label ?? 'Matchday 1';
     }
 
     public function deleteMatch(SoccerMatch $match)
@@ -212,6 +222,8 @@ class AdminManagement extends Component
         $this->matchAwayTeamId = '';
         $this->matchDate = now()->format('Y-m-d\TH:i');
         $this->matchVenue = '';
+        $this->matchGameweek = 1;
+        $this->matchGameweekLabel = 'Matchday 1';
         $this->editingMatch = null;
     }
 

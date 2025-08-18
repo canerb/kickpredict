@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Jobs\GeneratePredictionsJob;
 use App\Models\League;
 use App\Models\SoccerMatch;
 use App\Services\SoccerAnalysisService;
@@ -76,20 +77,6 @@ class Welcome extends Component
         }
     }
 
-    public function toggleMatch($matchId)
-    {
-        if (in_array($matchId, $this->expandedMatches)) {
-            $this->expandedMatches = array_diff($this->expandedMatches, [$matchId]);
-        } else {
-            $this->expandedMatches[] = $matchId;
-        }
-    }
-
-    public function isExpanded($matchId)
-    {
-        return in_array($matchId, $this->expandedMatches);
-    }
-
     public function analyzeNextGameweek()
     {
         // Only allow admin users to generate predictions
@@ -107,13 +94,30 @@ class Welcome extends Component
         
         try {
             $league = League::find($this->selectedLeagueId);
-            $analysisService = app(SoccerAnalysisService::class);
             
-            $result = $analysisService->analyzeNextGameweek($league);
-            $this->loadAvailableGameweeks(); // Refresh available gameweeks after generating predictions
+            if (!$league) {
+                throw new \Exception('League not found.');
+            }
+
+            // Check if there are matches without predictions
+            $matchesWithoutPredictions = SoccerMatch::where('league_id', $this->selectedLeagueId)
+                ->whereDoesntHave('prediction')
+                ->count();
+
+            if ($matchesWithoutPredictions === 0) {
+                $this->dispatch('notify', [
+                    'message' => 'No matches found without predictions for ' . $league->name . '. Please add matches first.',
+                    'type' => 'warning'
+                ]);
+                return;
+            }
+
+            // Dispatch the job
+            GeneratePredictionsJob::dispatch($this->selectedLeagueId, auth()->id());
             
             $this->dispatch('notify', [
-                'message' => "Generated predictions for {$result['matches_count']} matches!"
+                'message' => "Prediction generation job started for {$matchesWithoutPredictions} matches in {$league->name}.",
+                'type' => 'success'
             ]);
             
         } catch (\Exception $e) {
@@ -124,6 +128,20 @@ class Welcome extends Component
         } finally {
             $this->isLoading = false;
         }
+    }
+
+    public function toggleMatch($matchId)
+    {
+        if (in_array($matchId, $this->expandedMatches)) {
+            $this->expandedMatches = array_diff($this->expandedMatches, [$matchId]);
+        } else {
+            $this->expandedMatches[] = $matchId;
+        }
+    }
+
+    public function isExpanded($matchId)
+    {
+        return in_array($matchId, $this->expandedMatches);
     }
 
     public function formatProbability($probability)

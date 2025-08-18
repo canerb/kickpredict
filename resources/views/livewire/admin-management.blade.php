@@ -215,6 +215,16 @@
                                     @error('matchLeagueId') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Gameweek Number</label>
+                                    <input type="number" wire:model="matchGameweek" min="1" max="50" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                    @error('matchGameweek') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Gameweek Label (Optional)</label>
+                                    <input type="text" wire:model="matchGameweekLabel" placeholder="e.g., Matchday 1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    @error('matchGameweekLabel') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Home Team</label>
                                     <select wire:model="matchHomeTeamId" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                                         <option value="">Select Home Team</option>
@@ -234,6 +244,10 @@
                                     </select>
                                     @error('matchAwayTeamId') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                 </div>
+                            </div>
+                            
+                            <!-- Second row for date and venue -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Match Date</label>
                                     <input type="datetime-local" wire:model="matchDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
@@ -263,6 +277,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">League</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gameweek</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Match</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -273,6 +288,12 @@
                                 @foreach($matches as $match)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $match->league->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {{ $match->gameweek }}
+                                            @if($match->gameweek_label)
+                                                ({{ $match->gameweek_label }})
+                                            @endif
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {{ $match->homeTeam->name }} vs {{ $match->awayTeam->name }}
                                         </td>

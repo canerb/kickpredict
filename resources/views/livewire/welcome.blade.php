@@ -39,7 +39,7 @@
                                 class="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 px-4 rounded-md transition duration-200"
                             >
                                 <span wire:loading.remove>Generate Predictions</span>
-                                <span wire:loading>Generating...</span>
+                                <span wire:loading>Starting Job...</span>
                             </button>
                         @endif
                     @endauth
@@ -588,5 +588,4 @@
             </div>
         @endif
     </div>
-</div> 
 </div> 
