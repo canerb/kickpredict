@@ -22,7 +22,8 @@ class Welcome extends Component
 
     public function mount()
     {
-        $this->leagues = League::all();
+        // Order leagues with Premier League first, then alphabetically
+        $this->leagues = League::orderByRaw("CASE WHEN name LIKE '%Premier%' OR name LIKE '%Premier League%' THEN 0 ELSE 1 END, name")->get();
         $this->selectedLeagueId = $this->leagues->first()?->id;
         $this->loadAvailableGameweeks();
     }
