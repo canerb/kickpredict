@@ -69,7 +69,7 @@ class SoccerAnalysisService
         }
     }
 
-    private function storePrediction(SoccerMatch $match, array $predictionData): void
+    public function storePrediction(SoccerMatch $match, array $predictionData): void
     {
         $prediction = new Prediction();
         $prediction->match_id = $match->id;
@@ -86,7 +86,7 @@ class SoccerAnalysisService
         ]);
     }
 
-    private function generateMatchPrediction(array $matchData, League $league): array
+    public function generateMatchPrediction(array $matchData, League $league): array
     {
         $prompt = $this->buildPredictionPrompt($matchData, $league->name);
         $schema = $this->getPredictionSchema();

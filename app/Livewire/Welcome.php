@@ -88,35 +88,25 @@ class Welcome extends Component
             return;
         }
 
-        if (!$this->selectedLeagueId) return;
-
         $this->isLoading = true;
         
         try {
-            $league = League::find($this->selectedLeagueId);
-            
-            if (!$league) {
-                throw new \Exception('League not found.');
-            }
-
-            // Check if there are matches without predictions
-            $matchesWithoutPredictions = SoccerMatch::where('league_id', $this->selectedLeagueId)
-                ->whereDoesntHave('prediction')
-                ->count();
+            // Check if there are matches without predictions across ALL leagues
+            $matchesWithoutPredictions = SoccerMatch::whereDoesntHave('prediction')->count();
 
             if ($matchesWithoutPredictions === 0) {
                 $this->dispatch('notify', [
-                    'message' => 'No matches found without predictions for ' . $league->name . '. Please add matches first.',
+                    'message' => 'No matches found without predictions across all leagues. Please add matches first.',
                     'type' => 'warning'
                 ]);
                 return;
             }
 
-            // Dispatch the job
-            GeneratePredictionsJob::dispatch($this->selectedLeagueId, auth()->id());
+            // Dispatch the job for ALL matches (no specific league)
+            GeneratePredictionsJob::dispatch(null, auth()->id());
             
             $this->dispatch('notify', [
-                'message' => "Prediction generation job started for {$matchesWithoutPredictions} matches in {$league->name}.",
+                'message' => "Prediction generation job started for {$matchesWithoutPredictions} matches across all leagues.",
                 'type' => 'success'
             ]);
             
