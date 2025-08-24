@@ -14,6 +14,9 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    <!-- Plausible Analytics -->
+    <script defer data-domain="kickpredict.ai" src="https://plausible.io/js/script.js"></script>
+    
     <!-- Livewire Styles -->
     @livewireStyles
 </head>
